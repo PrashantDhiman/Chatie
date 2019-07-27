@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.models.UserObject;
 
@@ -35,9 +38,33 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.mNameTextView.setText(userList.get(position).getName());
         holder.mPhoneTextView.setText(userList.get(position).getPhone());
+
+        holder.mUserListLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String key= FirebaseDatabase.getInstance().getReference()
+                        .child("chat")
+                        .push()
+                        .getKey();
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child("user")
+                        .child(FirebaseAuth.getInstance().getUid())
+                        .child("chat")
+                        .child(key)
+                        .setValue(true);
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child("user")
+                        .child(userList.get(position).getuId())
+                        .child("chat")
+                        .child(key)
+                        .setValue(true);
+            }
+        });
     }
 
     @Override
@@ -48,12 +75,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView mNameTextView,mPhoneTextView;
+        private LinearLayout mUserListLinearLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mNameTextView=itemView.findViewById(R.id.nameTextView);
             mPhoneTextView=itemView.findViewById(R.id.phoneTextView);
+            mUserListLinearLayout=itemView.findViewById(R.id.itemUserLinearLayout);
         }
     }
 }

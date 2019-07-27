@@ -1,4 +1,4 @@
-package com.prashantdhiman.chatie;
+package com.prashantdhiman.chatie.utils;
 
 import java.util.HashMap;
 import java.util.Map;

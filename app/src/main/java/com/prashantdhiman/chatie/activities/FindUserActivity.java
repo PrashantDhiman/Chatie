@@ -1,4 +1,4 @@
-package com.prashantdhiman.chatie;
+package com.prashantdhiman.chatie.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.adapters.UserListAdapter;
 import com.prashantdhiman.chatie.models.UserObject;
+import com.prashantdhiman.chatie.utils.CountryToPhonePrefix;
 
 import java.util.ArrayList;
 
@@ -55,7 +57,7 @@ public class FindUserActivity extends AppCompatActivity {
             if(!String.valueOf(phone.charAt(0)).equals("+"))
                 phone=isoPrefix+phone;
 
-            UserObject contactObject=new UserObject(name,phone);
+            UserObject contactObject=new UserObject("",name,phone);
             contactList.add(contactObject);
 
             generateUserListUsingContactList(contactObject);  //userList contains only those contacts which are using Chatie
@@ -63,7 +65,7 @@ public class FindUserActivity extends AppCompatActivity {
         phonesCursor.close();
     }
 
-    private void generateUserListUsingContactList(UserObject contactObject) {
+    private void generateUserListUsingContactList(final UserObject contactObject) {
 
 
         DatabaseReference userDB= FirebaseDatabase.getInstance().getReference().child("user");
@@ -77,11 +79,12 @@ public class FindUserActivity extends AppCompatActivity {
 
                     for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
                         if(childSnapshot.child("name").getValue()!=null)
-                            name=childSnapshot.child("phone").getValue().toString();
+                            name=contactObject.getName();
                         if(childSnapshot.child("phone").getValue().toString()!=null)
                             phone=childSnapshot.child("phone").getValue().toString();
 
-                        UserObject userObject= new UserObject(name,phone);
+                        UserObject userObject= new UserObject(childSnapshot.getKey(),name,phone);
+
                         userList.add(userObject);
                         mUserListAdapter.notifyDataSetChanged();
                     }

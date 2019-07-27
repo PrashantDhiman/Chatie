@@ -1,4 +1,4 @@
-package com.prashantdhiman.chatie;
+package com.prashantdhiman.chatie.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prashantdhiman.chatie.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     private void logInUser() {
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
         if(user!=null){
-            startActivity(new Intent(getApplicationContext(),MainPageActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
             finish();
         }
     }

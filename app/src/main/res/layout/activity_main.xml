@@ -2,30 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
-    android:id="@+id/mainActivityLinearLayout">
+    tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/phoneNoEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone No."
-        android:textSize="22sp"/>
+        android:textSize="22sp" />
 
     <EditText
         android:id="@+id/codeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Verification Code"
-        android:textSize="22sp"/>
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/verifyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Verification Code"/>
+        android:text="Send Verification Code" />
 
 </LinearLayout>

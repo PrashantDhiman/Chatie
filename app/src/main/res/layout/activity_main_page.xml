@@ -4,7 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainPageActivity">
+    tools:context=".MainPageActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/findUsersButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Users"/>
 
     <Button
         android:id="@+id/logoutButton"

@@ -52,14 +52,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
                 FirebaseDatabase.getInstance().getReference()
                         .child("user")
-                        .child(FirebaseAuth.getInstance().getUid())
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("chat")
                         .child(key)
                         .setValue(true);
 
                 FirebaseDatabase.getInstance().getReference()
                         .child("user")
-                        .child(userList.get(position).getuId())
+                        .child(userList.get(position).getUId())
                         .child("chat")
                         .child(key)
                         .setValue(true);

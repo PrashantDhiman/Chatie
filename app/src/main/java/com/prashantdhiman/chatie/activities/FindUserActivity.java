@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,10 +59,13 @@ public class FindUserActivity extends AppCompatActivity {
             if(!String.valueOf(phone.charAt(0)).equals("+"))
                 phone=isoPrefix+phone;
 
-            UserObject contactObject=new UserObject("",name,phone);
-            contactList.add(contactObject);
-
-            generateUserListUsingContactList(contactObject);  //userList contains only those contacts which are using Chatie
+            if(!phone.equals(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())){
+                Log.i("status1",phone);
+                Log.i("status1",FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                UserObject contactObject=new UserObject("",name,phone);
+                contactList.add(contactObject);
+                generateUserListUsingContactList(contactObject);  //userList contains only those contacts which are using Chatie
+            }
         }
         phonesCursor.close();
     }

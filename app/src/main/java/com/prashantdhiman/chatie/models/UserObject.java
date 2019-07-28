@@ -19,7 +19,7 @@ public class UserObject {
         return name;
     }
 
-    public String getuId() {
+    public String getUId() {
         return uId;
     }
 
@@ -31,7 +31,7 @@ public class UserObject {
         this.name = name;
     }
 
-    public void setuId(String uId) {
+    public void setUId(String uId) {
         this.uId = uId;
     }
 }

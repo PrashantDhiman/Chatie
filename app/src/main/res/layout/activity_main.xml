@@ -21,28 +21,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="visible"/>
 
         <EditText
             android:id="@+id/phoneNoEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone No"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:visibility="visible"/>
 
         <EditText
             android:id="@+id/codeEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Verification Code"
-            android:textSize="22sp" />
+            android:hint="Enter OTP"
+            android:textSize="22sp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/verifyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Send Verification Code" />
+            android:text="Send OTP" />
 
     </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,8 @@ public class MainPageActivity extends AppCompatActivity {
     private RecyclerView mUserChatRecyclerView;
     private RecyclerView.Adapter mUserChatAdapter;
 
+    private ProgressBar mUserChatsProgressBar;
+
     ArrayList<ChatObject> userChatList;
 
     @Override
@@ -44,6 +47,7 @@ public class MainPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_page);
 
         mFindUsersButton=findViewById(R.id.findUsersButton);
+        mUserChatsProgressBar=findViewById(R.id.userChatsProgressBar);
 
         userChatList=new ArrayList<>();
 
@@ -53,6 +57,7 @@ public class MainPageActivity extends AppCompatActivity {
         initialiseUserChatRecyclerView();
 
         getUserChatList();
+        mUserChatsProgressBar.setVisibility(View.VISIBLE);
 
         mFindUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +75,7 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     private void getUserChatList() {
+
         userChatList.clear();
         mUserChatAdapter.notifyDataSetChanged();
 
@@ -87,6 +93,7 @@ public class MainPageActivity extends AppCompatActivity {
                 if(dataSnapshot1.exists()){
 
                     for(final DataSnapshot childSnapshot:dataSnapshot1.getChildren()){
+                        //mUserChatsProgressBar.setVisibility(View.VISIBLE);
 
                         Log.i("childrencount",String.valueOf(dataSnapshot1.getChildrenCount()));
 
@@ -113,10 +120,8 @@ public class MainPageActivity extends AppCompatActivity {
 
                         /*Log.i("idofother",idOfOtherPerson);
                         Log.i("nameofother",nameOfOtherPerson);*/
-
-
-
                     }
+                    mUserChatsProgressBar.setVisibility(View.GONE);
                 }
             }
 

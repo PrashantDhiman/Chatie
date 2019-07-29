@@ -72,7 +72,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                                             public void onSuccess(Void aVoid) {
                                                 ((Activity)view.getContext()).finish();
                                                 ((Activity)view.getContext()).startActivity(((Activity)view.getContext()).getIntent());
-                                                Toast.makeText(view.getContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(view.getContext(),"Deleted Successfully",Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

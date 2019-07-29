@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -62,11 +64,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!mPhoneNoEditText.getText().toString().isEmpty()){
-                    if(mVerificationId!=null){            // either this method will be used to login in
+                    startPhoneNoVerification();             //either this method will be used in which
+                                                            //google will authorise automatically
+
+                    if(mVerificationId!=null){            // else this method will be used to login in
                         verifyPhoneNoWithCode();          // which code will be used
                     }
-                    startPhoneNoVerification();           //or this method will be used in which
-                }                                         //google will authorise automatically without sending code
+
+                }
             }
         });
 
@@ -78,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-
+                Snackbar.make(mMainActivityLinearLayout,"Please enter correct info",Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
@@ -86,7 +91,11 @@ public class LoginActivity extends AppCompatActivity {
                 super.onCodeSent(s, forceResendingToken);
 
                 mVerificationId=s;
-                mVerifyButton.setText("Verify");
+                mVerifyButton.setText("Confirm OTP");
+
+                mNameEditText.setVisibility(View.GONE);
+                mPhoneNoEditText.setVisibility(View.GONE);
+                mCodeEditText.setVisibility(View.VISIBLE);
             }
         };
 

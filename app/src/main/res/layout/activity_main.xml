@@ -5,27 +5,45 @@
     android:id="@+id/mainActivityLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/art_bg"
     tools:context=".activities.LoginActivity">
 
-    <EditText
-        android:id="@+id/phoneNoEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone No."
-        android:textSize="22sp" />
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/codeEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Verification Code"
-        android:textSize="22sp" />
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/verifyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send Verification Code" />
+        <EditText
+            android:id="@+id/phoneNoEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone No"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/codeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Verification Code"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/verifyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Send Verification Code" />
+
+    </LinearLayout>
 
 </LinearLayout>

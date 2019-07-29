@@ -1,5 +1,6 @@
 package com.prashantdhiman.chatie.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.models.UserObject;
@@ -45,24 +47,34 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
         holder.mUserListLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String key= FirebaseDatabase.getInstance().getReference()
                         .child("chat")
                         .push()
                         .getKey();
 
-                FirebaseDatabase.getInstance().getReference()
+                //for current user
+                DatabaseReference mDb1=FirebaseDatabase.getInstance().getReference()
                         .child("user")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("chat")
-                        .child(key)
-                        .setValue(true);
+                        .child(key);
 
-                FirebaseDatabase.getInstance().getReference()
+                mDb1.child("sender").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid()).isSuccessful();  // 1 for sender
+                mDb1.child("receiver").setValue(userList.get(position).getUId());                       // 0 for receiver
+
+                //for user selected from contacts
+                DatabaseReference mDb2=FirebaseDatabase.getInstance().getReference()
                         .child("user")
                         .child(userList.get(position).getUId())
                         .child("chat")
-                        .child(key)
-                        .setValue(true);
+                        .child(key);
+
+                mDb2.child("sender").setValue(userList.get(position).getUId());
+                mDb2.child("receiver").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                ((Activity)view.getContext()).finish();
+
             }
         });
     }

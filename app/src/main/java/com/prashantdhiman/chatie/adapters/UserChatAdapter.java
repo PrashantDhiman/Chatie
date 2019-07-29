@@ -1,6 +1,9 @@
 package com.prashantdhiman.chatie.adapters;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.activities.ChatActivity;
 import com.prashantdhiman.chatie.models.ChatObject;
@@ -41,7 +48,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mChatTitle.setText(userChatList.get(position).getChatId());
+        holder.mChatTitle.setText(userChatList.get(position).getName());
 
         holder.mUserChatLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +56,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
                 Intent intent=new Intent(view.getContext(),ChatActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("chatId",userChatList.get(holder.getAdapterPosition()).getChatId());
+                bundle.putString("name",userChatList.get(holder.getAdapterPosition()).getName());
                 intent.putExtras(bundle);
                 view.getContext().startActivity(intent);
             }

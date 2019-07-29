@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText mPhoneNoEditText,mCodeEditText;
+    private EditText mNameEditText,mPhoneNoEditText,mCodeEditText;
     private Button mVerifyButton;
     private LinearLayout mMainActivityLinearLayout;
 
@@ -46,9 +47,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         FirebaseApp.initializeApp(this);
         logInUser();
 
+        mNameEditText=findViewById(R.id.nameEditText);
         mPhoneNoEditText=findViewById(R.id.phoneNoEditText);
         mCodeEditText=findViewById(R.id.codeEditText);
         mVerifyButton=findViewById(R.id.verifyButton);
@@ -107,9 +111,15 @@ public class LoginActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(!dataSnapshot.exists()){
                                     Map<String,Object> userMap=new HashMap<>();
-                                    userMap.put("name",user.getPhoneNumber());
+                                    userMap.put("name",mNameEditText.getText().toString());
                                     userMap.put("phone",user.getPhoneNumber());
                                     userDB.updateChildren(userMap);
+
+
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(mNameEditText.getText().toString()).build();
+
+                                    user.updateProfile(profileUpdates);
                                 }
                             }
 

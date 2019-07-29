@@ -37,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private ArrayList<MessageObject> messageList;
 
-    private String chatId;
+    private String chatId,name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         chatId=intent.getStringExtra("chatId");
+        name=intent.getStringExtra("name");
 
         fetchChatMessages();
 
@@ -71,13 +72,21 @@ public class ChatActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()){
                     String text="";
                     String senderId="";
+                    String senderName="";
 
                     if(dataSnapshot.child("text").getValue()!=null)
                         text=dataSnapshot.child("text").getValue().toString();
                     if(dataSnapshot.child("senderId").getValue()!=null)
                         senderId=dataSnapshot.child("senderId").getValue().toString();
+                    if(dataSnapshot.child("senderId").getValue()!=null){
+                        if(dataSnapshot.child("senderName").child("displayName").exists()){
+                            senderName=dataSnapshot.child("senderName").child("displayName").getValue().toString();
+                        }else{
+                            senderName=dataSnapshot.child("senderName").getValue().toString();
+                        }
+                    }
 
-                    MessageObject messageObject=new MessageObject(dataSnapshot.getKey(),senderId,text);
+                    MessageObject messageObject=new MessageObject(chatId,dataSnapshot.getKey(),senderId,senderName,text);
                     messageList.add(messageObject);
                     mLinearLayoutManager.scrollToPosition(messageList.size()-1);
                     mMessageAdapter.notifyDataSetChanged();
@@ -114,6 +123,7 @@ public class ChatActivity extends AppCompatActivity {
             Map messageMap=new HashMap<>();
             messageMap.put("text",mMessageEditText.getText().toString());
             messageMap.put("senderId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+            messageMap.put("senderName",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
             newMessageDb.updateChildren(messageMap);
         }
         mMessageEditText.setText(null);

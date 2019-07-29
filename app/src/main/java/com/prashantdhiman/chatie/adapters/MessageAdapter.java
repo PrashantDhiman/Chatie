@@ -1,14 +1,25 @@
 package com.prashantdhiman.chatie.adapters;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.models.MessageObject;
 
@@ -35,9 +46,49 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
         holder.mMessageTextView.setText(messageList.get(position).getMessage());
-        holder.mSenderTextView.setText(messageList.get(position).getSenderId());
+        holder.mSenderNameTextView.setText(messageList.get(position).getSenderName());
+
+
+
+        holder.mMesaageLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                AlertDialog.Builder deleteAlertDialog=new AlertDialog.Builder(view.getContext());
+                deleteAlertDialog
+                        .setTitle("Delete?")
+                        .setMessage("Delete this message?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("chat")
+                                        .child(messageList.get(position).getChatId())
+                                        .child(messageList.get(position).getMessageId())
+                                        .removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                ((Activity)view.getContext()).finish();
+                                                ((Activity)view.getContext()).startActivity(((Activity)view.getContext()).getIntent());
+                                                Toast.makeText(view.getContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(view.getContext(),"Unable to delete",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("No",null)
+                        .show();
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -47,12 +98,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView mMessageTextView,mSenderTextView;
+        private LinearLayout mMesaageLinearLayout;
+        private TextView mMessageTextView,mSenderNameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mMesaageLinearLayout=itemView.findViewById(R.id.messageLinearLayout);
+
             mMessageTextView=itemView.findViewById(R.id.messageTextView);
-            mSenderTextView=itemView.findViewById(R.id.senderTextView);
+            mSenderNameTextView=itemView.findViewById(R.id.senderNameTextView);
         }
     }
 }

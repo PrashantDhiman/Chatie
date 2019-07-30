@@ -46,7 +46,9 @@
                     android:layout_margin="8dp"
                     android:layout_weight="0.85"
                     android:hint="Write message here..."
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:background="@drawable/textview_border"
+                    android:padding="8dp"/>
 
                 <Button
                     android:id="@+id/sendButton"

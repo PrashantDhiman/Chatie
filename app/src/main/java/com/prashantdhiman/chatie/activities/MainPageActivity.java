@@ -54,6 +54,8 @@ public class MainPageActivity extends AppCompatActivity {
         mUserChatsProgressBar=findViewById(R.id.userChatsProgressBar);
         mMainPageActivityLayout=findViewById(R.id.mainPageActivityLayout);
 
+        getSupportActionBar().setTitle("Chaty");
+
         userChatList=new ArrayList<>();
 
         getPermissions();
@@ -130,7 +132,8 @@ public class MainPageActivity extends AppCompatActivity {
                 }else{
                     mUserChatsProgressBar.setVisibility(View.GONE);
 
-                    Snackbar.make(mMainPageActivityLayout,"Start chatting by tapping on + button",Snackbar.LENGTH_INDEFINITE).show();
+                    Snackbar.make(mMainPageActivityLayout,"Start chatting by tapping on + button",Snackbar.LENGTH_LONG).show();
+
                 }
             }
 

@@ -6,46 +6,91 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/art_bg"
-    tools:context=".activities.LoginActivity">
+    android:background="@drawable/login_screen"
+    tools:context=".activities.LoginActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="0.4"
+        android:gravity="center_horizontal|center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chaty"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"
+            android:textSize="48sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login/Signup"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:layout_margin="8dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_margin="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_weight="0.6">
 
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:textSize="22sp"
-            android:visibility="visible"/>
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="visible"
+            android:textColorHint="#80FFFFFF"
+            android:layout_margin="8dp"
+            android:background="@drawable/textview_border"
+            android:padding="8dp"/>
 
         <EditText
             android:id="@+id/phoneNoEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone No"
-            android:textSize="22sp"
-            android:visibility="visible"/>
+            android:hint="Phone No."
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="visible"
+            android:textColorHint="#80FFFFFF"
+            android:background="@drawable/textview_border"
+            android:layout_margin="8dp"
+            android:padding="8dp"/>
 
         <EditText
             android:id="@+id/codeEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter OTP"
-            android:textSize="22sp"
-            android:visibility="gone"/>
+            android:hint="OTP"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:background="@drawable/textview_border"
+            android:textColorHint="#80FFFFFF"
+            android:padding="8dp"/>
 
         <Button
             android:id="@+id/verifyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Send OTP" />
+            android:layout_margin="16dp"
+            android:background="@drawable/btn_blue_bg"
+            android:text="Send OTP"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 

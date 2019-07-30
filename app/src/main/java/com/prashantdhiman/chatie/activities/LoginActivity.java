@@ -2,8 +2,10 @@ package com.prashantdhiman.chatie.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(LoginActivity.this, R.color.colorLoginBg));
+        }
+
         getSupportActionBar().hide();
 
         FirebaseApp.initializeApp(this);
@@ -63,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         mVerifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!mPhoneNoEditText.getText().toString().isEmpty()){
+                if(!mPhoneNoEditText.getText().toString().isEmpty() && !mNameEditText.getText().toString().isEmpty()){
                     startPhoneNoVerification();             //either this method will be used in which
                                                             //google will authorise automatically
 
@@ -71,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
                         verifyPhoneNoWithCode();          // which code will be used
                     }
 
+                }else{
+                    Snackbar.make(mMainActivityLinearLayout,"Please enter correct info",Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
@@ -91,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 super.onCodeSent(s, forceResendingToken);
 
                 mVerificationId=s;
-                mVerifyButton.setText("Confirm OTP");
+                mVerifyButton.setText("Confirm");
 
                 mNameEditText.setVisibility(View.GONE);
                 mPhoneNoEditText.setVisibility(View.GONE);
@@ -113,6 +121,11 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     final FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
 
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(mNameEditText.getText().toString()).build();
+
+                    user.updateProfile(profileUpdates);
+
                     if(user!=null){
                         final DatabaseReference userDB=FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
                         userDB.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,11 +137,6 @@ public class LoginActivity extends AppCompatActivity {
                                     userMap.put("phone",user.getPhoneNumber());
                                     userDB.updateChildren(userMap);
 
-
-                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(mNameEditText.getText().toString()).build();
-
-                                    user.updateProfile(profileUpdates);
                                 }
                             }
 

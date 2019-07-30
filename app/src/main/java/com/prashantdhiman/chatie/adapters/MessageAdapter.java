@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.models.MessageObject;
@@ -46,9 +47,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         holder.mMessageTextView.setText(messageList.get(position).getMessage());
-        holder.mSenderNameTextView.setText(messageList.get(position).getSenderName());
-
-
+        if(messageList.get(position).getSenderName().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())){
+            holder.mSenderNameTextView.setText("You");
+        }else{
+            holder.mSenderNameTextView.setText(messageList.get(position).getSenderName());
+        }
 
         holder.mMesaageLinearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

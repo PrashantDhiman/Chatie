@@ -64,6 +64,9 @@ public class ChatActivity extends AppCompatActivity {
         chatId=intent.getStringExtra("chatId");
         name=intent.getStringExtra("name");
 
+        if(name!=null)
+            getSupportActionBar().setTitle(name);
+
         mChatActivityProgressBar.setVisibility(View.VISIBLE);
         fetchChatMessages();
 

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +22,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +36,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView mMessageRecyclerView;
     private RecyclerView.Adapter mMessageAdapter;
+
     private LinearLayoutManager mLinearLayoutManager;
+    private ProgressBar mChatActivityProgressBar;
+    private RelativeLayout mChatActivityLayout;
 
     private ArrayList<MessageObject> messageList;
 
@@ -46,6 +52,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessageEditText=findViewById(R.id.messageEditText);
         mSendButton=findViewById(R.id.sendButton);
+        mChatActivityProgressBar=findViewById(R.id.chatActivityProgressBar);
+        mChatActivityLayout=findViewById(R.id.chatActivityLayout);
 
         messageList =new ArrayList<>();
         initializeMessageRecyclerView();
@@ -54,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
         chatId=intent.getStringExtra("chatId");
         name=intent.getStringExtra("name");
 
+        mChatActivityProgressBar.setVisibility(View.VISIBLE);
         fetchChatMessages();
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +73,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchChatMessages() {
+    public void fetchChatMessages() {
         DatabaseReference messageDb=FirebaseDatabase.getInstance().getReference().child("chat").child(chatId);
         messageDb.addChildEventListener(new ChildEventListener() {
             @Override
@@ -90,6 +99,12 @@ public class ChatActivity extends AppCompatActivity {
                     messageList.add(messageObject);
                     mLinearLayoutManager.scrollToPosition(messageList.size()-1);
                     mMessageAdapter.notifyDataSetChanged();
+
+                    mChatActivityProgressBar.setVisibility(View.GONE);
+                }else{
+                    mChatActivityProgressBar.setVisibility(View.GONE);
+
+                    Snackbar.make(mChatActivityLayout,"Say hello to "+ name,Snackbar.LENGTH_LONG).show();
                 }
             }
 

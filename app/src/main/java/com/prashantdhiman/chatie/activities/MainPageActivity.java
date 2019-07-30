@@ -2,6 +2,7 @@ package com.prashantdhiman.chatie.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,7 @@ public class MainPageActivity extends AppCompatActivity {
     private RecyclerView.Adapter mUserChatAdapter;
 
     private ProgressBar mUserChatsProgressBar;
+    private CoordinatorLayout mMainPageActivityLayout;
 
     ArrayList<ChatObject> userChatList;
 
@@ -48,6 +51,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         mFindUsersButton=findViewById(R.id.findUsersButton);
         mUserChatsProgressBar=findViewById(R.id.userChatsProgressBar);
+        mMainPageActivityLayout=findViewById(R.id.mainPageActivityLayout);
 
         userChatList=new ArrayList<>();
 
@@ -56,8 +60,8 @@ public class MainPageActivity extends AppCompatActivity {
 
         initialiseUserChatRecyclerView();
 
-        getUserChatList();
         mUserChatsProgressBar.setVisibility(View.VISIBLE);
+        getUserChatList();
 
         mFindUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +126,10 @@ public class MainPageActivity extends AppCompatActivity {
                         Log.i("nameofother",nameOfOtherPerson);*/
                     }
                     mUserChatsProgressBar.setVisibility(View.GONE);
+                }else{
+                    mUserChatsProgressBar.setVisibility(View.GONE);
+
+                    Snackbar.make(mMainPageActivityLayout,"Start chatting by tapping on + button",Snackbar.LENGTH_INDEFINITE).show();
                 }
             }
 

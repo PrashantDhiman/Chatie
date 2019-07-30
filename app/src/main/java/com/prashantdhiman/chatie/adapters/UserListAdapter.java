@@ -2,19 +2,26 @@ package com.prashantdhiman.chatie.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prashantdhiman.chatie.R;
+import com.prashantdhiman.chatie.activities.MainPageActivity;
 import com.prashantdhiman.chatie.models.UserObject;
 
 import java.util.ArrayList;
@@ -46,34 +53,61 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
         holder.mUserListLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
-                String key= FirebaseDatabase.getInstance().getReference()
-                        .child("chat")
-                        .push()
-                        .getKey();
-
-                //for current user
-                DatabaseReference mDb1=FirebaseDatabase.getInstance().getReference()
+                DatabaseReference mDb=FirebaseDatabase.getInstance().getReference()
                         .child("user")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child("chat")
-                        .child(key);
+                        .child("chat");
 
-                mDb1.child("sender").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid()).isSuccessful();  // 1 for sender
-                mDb1.child("receiver").setValue(userList.get(position).getUId());                       // 0 for receiver
+                mDb.orderByChild("receiver").equalTo(userList.get(position).getUId())  // to check if chat doesn't exists between users
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(!dataSnapshot.exists()){
 
-                //for user selected from contacts
-                DatabaseReference mDb2=FirebaseDatabase.getInstance().getReference()
-                        .child("user")
-                        .child(userList.get(position).getUId())
-                        .child("chat")
-                        .child(key);
+                                    String key= FirebaseDatabase.getInstance().getReference()
+                                            .child("chat")
+                                            .push()
+                                            .getKey();
 
-                mDb2.child("sender").setValue(userList.get(position).getUId());
-                mDb2.child("receiver").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    //for current user
+                                    DatabaseReference mDb1=FirebaseDatabase.getInstance().getReference()
+                                            .child("user")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .child("chat")
+                                            .child(key);
 
-                ((Activity)view.getContext()).finish();
+                                    mDb1.child("sender").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid()).isSuccessful();  // 1 for sender
+                                    mDb1.child("receiver").setValue(userList.get(position).getUId());                       // 0 for receiver
+
+                                    //for user selected from contacts
+                                    DatabaseReference mDb2=FirebaseDatabase.getInstance().getReference()
+                                            .child("user")
+                                            .child(userList.get(position).getUId())
+                                            .child("chat")
+                                            .child(key);
+
+                                    mDb2.child("sender").setValue(userList.get(position).getUId());
+                                    mDb2.child("receiver").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                                    //((Activity)view.getContext()).finish();
+
+                                    Intent intent=new Intent(view.getContext(), MainPageActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    (view.getContext()).startActivity(intent);
+                                    ((Activity)view.getContext()).finish();
+
+                                }else{
+                                    Toast.makeText(view.getContext(),"Chat with this user already exists",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
             }
         });

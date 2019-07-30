@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.models.MessageObject;
@@ -71,7 +68,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 ((Activity)view.getContext()).finish();
-                                                ((Activity)view.getContext()).startActivity(((Activity)view.getContext()).getIntent());
+                                                view.getContext().startActivity(((Activity)view.getContext()).getIntent());
+
                                                 Toast.makeText(view.getContext(),"Deleted Successfully",Toast.LENGTH_SHORT).show();
                                             }
                                         })

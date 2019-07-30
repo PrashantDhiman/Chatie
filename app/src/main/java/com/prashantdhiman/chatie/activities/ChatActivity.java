@@ -13,12 +13,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prashantdhiman.chatie.R;
 import com.prashantdhiman.chatie.adapters.MessageAdapter;
 import com.prashantdhiman.chatie.models.MessageObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,11 +76,31 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void fetchChatMessages() {
+
+        //Log.i("insidefetchchat","reached");
         DatabaseReference messageDb=FirebaseDatabase.getInstance().getReference().child("chat").child(chatId);
+
+        messageDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    mChatActivityProgressBar.setVisibility(View.GONE);
+
+                    Snackbar.make(mChatActivityLayout,"Say hello to "+ name,Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         messageDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if(dataSnapshot.exists()){
+                    //Log.i("insideif","reached");
                     String text="";
                     String senderId="";
                     String senderName="";
@@ -102,6 +124,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     mChatActivityProgressBar.setVisibility(View.GONE);
                 }else{
+                    Log.i("insideelse","reached");
                     mChatActivityProgressBar.setVisibility(View.GONE);
 
                     Snackbar.make(mChatActivityLayout,"Say hello to "+ name,Snackbar.LENGTH_LONG).show();

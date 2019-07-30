@@ -1,6 +1,7 @@
 package com.prashantdhiman.chatie.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -170,6 +171,12 @@ public class MainPageActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
+        }else if(item.getItemId()==R.id.aboutButton){
+            AlertDialog.Builder aboutAlertDialog=new AlertDialog.Builder(this);
+            aboutAlertDialog
+                    .setTitle("Chatie V1")
+                    .setMessage("App developed by Prashant Dhiman")
+                    .show();
         }
         return super.onOptionsItemSelected(item);
     }
